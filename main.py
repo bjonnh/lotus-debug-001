@@ -46,22 +46,22 @@ if __name__ == "__main__":
     with multiprocessing.Pool(cpus) as pool:
         processed_df = pd.concat(pool.map(f, df_chunks), ignore_index=True)
 
-df_2 = processed_df.loc[:,
+    df_2 = processed_df.loc[:,
        ~processed_df.columns.isin(['ROMol', 'ROMolSanitized', 'ROMolSanitizedLargestFragment', 'flatROMol',
                                    'ROMolSanitizedLargestFragmentUncharged'])]
 
-output_path = os.path.dirname(ouput_file_path)
+    output_path = os.path.dirname(ouput_file_path)
 
-if output_path != '' and not os.path.exists(output_path):
-    try:
-        os.makedirs(os.path.dirname(ouput_file_path))
-    except OSError as exc:  # Guard against race condition
-        if exc.errno != errno.EEXIST:
-            raise
+    if output_path != '' and not os.path.exists(output_path):
+        try:
+            os.makedirs(os.path.dirname(ouput_file_path))
+        except OSError as exc:  # Guard against race condition
+            if exc.errno != errno.EEXIST:
+                raise
 
-df_2.to_csv(
-    ouput_file_path,
-    sep='\t',
-    index=False,
-    compression='gzip'
-)
+    df_2.to_csv(
+        ouput_file_path,
+        sep='\t',
+        index=False,
+        compression='gzip'
+    )
